@@ -30,10 +30,41 @@ public class MathExpressionCalculator {
             } else if (token.equals(")")) {
                 processParenthesis(valueStack, operatorStack);
             } else {
-                // processOperator();
+                processOperator(token, valueStack, operatorStack);
             }
         }
         return 0;
+    }
+
+    /**
+     * Метод для обработки операторов и выполнения операций.
+     *
+     * @param token текущий оператор
+     * @param valueStack стек значений
+     * @param operatorStack стек операторов
+     */
+    private void processOperator(String token, Stack<Double> valueStack, Stack<String> operatorStack) {
+        while (!operatorStack.isEmpty() && getOperatorPriority(operatorStack.peek()) >= getOperatorPriority(token)) {
+            valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
+        }
+        operatorStack.push(token);
+    }
+
+    /**
+     * Метод для определения приоритета оператора.
+     *
+     * @param operator оператор
+     * @return приоритет оператора
+     */
+    private int getOperatorPriority(String operator) {
+        switch (operator) {
+            case "(": return 0;
+            case "+": return 1;
+            case "-": return 1;
+            case "*": return 2;
+            case "/": return 2;
+            default: return 2;
+        }
     }
 
     /**
@@ -44,7 +75,7 @@ public class MathExpressionCalculator {
      */
     private void processParenthesis(Stack<Double> valueStack, Stack<String> operatorStack) {
         while (!operatorStack.peek().equals("(")) {
-            //valueStack.push(performOperation());
+            valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
         }
         operatorStack.pop();
     }
