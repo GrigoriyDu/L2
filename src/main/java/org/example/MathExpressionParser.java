@@ -33,7 +33,12 @@ public class MathExpressionParser {
      * @throws RuntimeException если скобки в выражении не сбалансированы
      */
     public double evaluateExpression() {
-        return 0;
+        if (areBracketsBalanced()) {
+            List<String> tokens = parseExpression(expression);
+            MathExpressionCalculator calculator = new MathExpressionCalculator();
+            return calculator.computeExpression(tokens);
+        }
+        throw new RuntimeException("Скобки в выражении не сбалансированы");
     }
 
     /**
