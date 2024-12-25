@@ -1,6 +1,9 @@
 package org.example;
 
 import java.util.List;
+import java.util.Stack;
+import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Класс для разбора математических выражений.
@@ -47,7 +50,17 @@ public class MathExpressionParser {
      * @return true, если скобки сбалансированы, иначе false
      */
     public boolean areBracketsBalanced() {
-        return false;
+        Stack<Character> stack = new Stack<>();
+        for (char c : expression.toCharArray()) {
+            if (c == '(') {
+                stack.push(c);
+            } else if (c == ')') {
+                if (stack.isEmpty() || stack.pop() != '(') {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
     }
 
     /**
@@ -57,7 +70,31 @@ public class MathExpressionParser {
      * @return список токенов
      */
     public List<String> parseExpression(String expression) {
-        return null;
+        List<String> tokens = new ArrayList<>();
+        StringBuilder currentToken = new StringBuilder();
+        Scanner scanner = new Scanner(System.in);
+
+        for (char c : expression.toCharArray()) {
+            if (Character.isDigit(c) || c == '.') {
+                currentToken.append(c);
+            } else if (isOperator(c) || isParenthesis(c)) {
+                if (currentToken.length() > 0) {
+                    tokens.add(currentToken.toString());
+                    currentToken = new StringBuilder();
+                }
+                tokens.add(String.valueOf(c));
+            } else if (Character.isLetter(c)) {
+                System.out.println("Введите значение для переменной " + c + ":");
+                String value = scanner.nextLine();
+                tokens.add(value);
+            }
+        }
+
+        if (currentToken.length() > 0) {
+            tokens.add(currentToken.toString());
+        }
+
+        return tokens;
     }
 
     /**
