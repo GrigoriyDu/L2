@@ -23,11 +23,49 @@ public class MathExpressionCalculator {
         Stack<String> operatorStack = new Stack<>();
 
         for (String token : tokens) {
-            if (isNumeric(token)){
-                // Пустой блок кода
+            if (isNumeric(token)) {
+                valueStack.push(Double.parseDouble(token));
+            } else if (token.equals("(")) {
+                operatorStack.push(token);
+            } else if (token.equals(")")) {
+                processParenthesis(valueStack, operatorStack);
+            } else {
+                // processOperator();
             }
         }
         return 0;
+    }
+
+    /**
+     * Метод для обработки скобок и выполнения операций внутри них.
+     *
+     * @param valueStack стек значений
+     * @param operatorStack стек операторов
+     */
+    private void processParenthesis(Stack<Double> valueStack, Stack<String> operatorStack) {
+        while (!operatorStack.peek().equals("(")) {
+            //valueStack.push(performOperation());
+        }
+        operatorStack.pop();
+    }
+
+    /**
+     * Метод для выполнения операции над двумя числами с использованием оператора.
+     *
+     * @param left левое число
+     * @param right правое число
+     * @param operator оператор
+     * @return результат операции
+     */
+    private double performOperation(double left, double right, String operator) {
+        char op = operator.charAt(0);
+        switch (op) {
+            case '+': return left + right;
+            case '-': return right - left;
+            case '*': return left * right;
+            case '/': return (double) right / left;
+            default: return right;
+        }
     }
 
     /**
