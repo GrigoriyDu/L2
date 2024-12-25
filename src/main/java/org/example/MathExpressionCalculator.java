@@ -44,7 +44,7 @@ public class MathExpressionCalculator {
      * @param valueStack стек значений
      * @param operatorStack стек операторов
      */
-    private void processOperator(String token, Stack<Double> valueStack, Stack<String> operatorStack) {
+     void processOperator(String token, Stack<Double> valueStack, Stack<String> operatorStack) {
         while (!operatorStack.isEmpty() && getOperatorPriority(operatorStack.peek()) >= getOperatorPriority(token)) {
             valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
         }
