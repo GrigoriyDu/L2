@@ -104,7 +104,7 @@ public class MathExpressionParser {
      * @return true, если символ является оператором, иначе false
      */
     public boolean isOperator(char c) {
-        return false;
+        return c == '+' || c == '-' || c == '*' || c == '/';
     }
 
     /**
@@ -114,6 +114,6 @@ public class MathExpressionParser {
      * @return true, если символ является скобкой, иначе false
      */
     public boolean isParenthesis(char c) {
-        return false;
+        return c == '(' || c == ')';
     }
 }
