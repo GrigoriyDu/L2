@@ -33,7 +33,8 @@ public class MathExpressionCalculator {
                 processOperator(token, valueStack, operatorStack);
             }
         }
-        return 0;
+        processRemainingOperators(valueStack, operatorStack);
+        return valueStack.isEmpty() ? 0 : valueStack.pop();
     }
 
     /**
@@ -48,6 +49,41 @@ public class MathExpressionCalculator {
             valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
         }
         operatorStack.push(token);
+    }
+
+    /**
+     * Метод для обработки скобок и выполнения операций внутри них.
+     *
+     * @param valueStack стек значений
+     * @param operatorStack стек операторов
+     */
+    private void processParenthesis(Stack<Double> valueStack, Stack<String> operatorStack) {
+        while (!operatorStack.peek().equals("(")) {
+            valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
+        }
+        operatorStack.pop();
+    }
+
+    /**
+     * Метод для обработки оставшихся операторов после прохождения всех токенов.
+     *
+     * @param valueStack стек значений
+     * @param operatorStack стек операторов
+     */
+    private void processRemainingOperators(Stack<Double> valueStack, Stack<String> operatorStack) {
+        while (!operatorStack.isEmpty()) {
+            valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
+        }
+    }
+
+    /**
+     * Метод для проверки, является ли строка числом.
+     *
+     * @param token строка для проверки
+     * @return true, если строка является числом, иначе false
+     */
+    private boolean isNumeric(String token) {
+        return Character.isDigit(token.charAt(0));
     }
 
     /**
@@ -68,19 +104,6 @@ public class MathExpressionCalculator {
     }
 
     /**
-     * Метод для обработки скобок и выполнения операций внутри них.
-     *
-     * @param valueStack стек значений
-     * @param operatorStack стек операторов
-     */
-    private void processParenthesis(Stack<Double> valueStack, Stack<String> operatorStack) {
-        while (!operatorStack.peek().equals("(")) {
-            valueStack.push(performOperation(valueStack.pop(), valueStack.pop(), operatorStack.pop()));
-        }
-        operatorStack.pop();
-    }
-
-    /**
      * Метод для выполнения операции над двумя числами с использованием оператора.
      *
      * @param left левое число
@@ -97,16 +120,6 @@ public class MathExpressionCalculator {
             case '/': return (double) right / left;
             default: return right;
         }
-    }
-
-    /**
-     * Метод для проверки, является ли строка числом.
-     *
-     * @param token строка для проверки
-     * @return true, если строка является числом, иначе false
-     */
-    private boolean isNumeric(String token) {
-        return Character.isDigit(token.charAt(0));
     }
 }
 
